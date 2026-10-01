@@ -1,6 +1,9 @@
 # 🤖 Autonomous AI Job Hunter
-
+### 1. The Automation Architecture
 <img width="956" height="346" alt="Screenshot 2026-10-01 090522" src="https://github.com/user-attachments/assets/8bb3eb2e-f3c9-4d65-9c69-7296e94ef461" />
+### 2. The Final Output (Automated Database)
+After the AI finishes analyzing and filtering the jobs in the background, all perfectly matched roles are automatically written and categorized directly into a Google Sheets tracking database:
+<img width="1208" height="631" alt="image" src="https://github.com/user-attachments/assets/c7abb561-6e3b-4969-8ffa-4d5bf66b282a" />
 
 An automated, dual-persona job recruitment pipeline built with n8n. This workflow scrapes live job boards, analyzes postings against multiple resumes simultaneously using AI, and automatically categorizes them into a tracking database.
 
