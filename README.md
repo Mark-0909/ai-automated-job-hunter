@@ -1,2 +1,25 @@
-# ai-automated-job-hunter
+# 🤖 Autonomous AI Job Hunter
 
+![Workflow Architecture](workflow.png)
+
+An automated, dual-persona job recruitment pipeline built with n8n. This workflow scrapes live job boards, analyzes postings against multiple resumes simultaneously using AI, and automatically categorizes them into a tracking database.
+
+## 🌟 Features
+* **Automated Web Scraping**: Pulls the newest developer job postings from JobStreet three times a day via Apify.
+* **Dual-Persona AI Analysis**: Uses Google Gemini to analyze each job description in parallel against two distinct resumes (Quality Assurance and Software Development) to determine exact role alignment.
+* **Intelligent Rate Limiting**: Features a custom-built loop and delay architecture to strictly adhere to Google's Free Tier API rate limits (15 RPM) and prevent server timeouts.
+* **Database Deduplication**: Automatically cross-references new jobs with a Google Sheets database to ensure no duplicates are added and existing "Fit" jobs are never overwritten by "Unfit" updates.
+* **Zero-Touch Automation**: Runs completely autonomously in the background on a Cron schedule.
+
+## 🛠️ Tech Stack
+* **n8n**: Workflow automation and visual node orchestration
+* **Apify**: Web scraping (JobStreet API)
+* **Google Gemini API**: Large Language Model for resume alignment analysis
+* **Google Cloud Workspace**: Google Drive API (PDF storage) and Google Sheets API (Database)
+
+## ⚙️ Architecture & Data Flow
+1. **Trigger**: A cron schedule fires at 8:00 AM, 12:00 PM, and 6:00 PM.
+2. **Scrape & Fetch**: Triggers an Apify actor to scrape fresh jobs while simultaneously downloading PDF resumes from Google Drive.
+3. **Parallel Pacing Loops**: Job data is passed into two separate pacing loops (10-second delays) to safely bypass LLM rate limits.
+4. **AI Decision Engine**: Gemini reads the raw job description and acts as a strict filter, analyzing the text against the PDF resumes.
+5. **Merge & Store**: Matches are automatically appended to a "Fit" Google Sheet. Rejections are passed through a deduplication Merge node before being appended to an "Unfit" sheet for historical tracking.

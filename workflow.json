@@ -1,0 +1,909 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "f7ggUvGaOrrUuPkZQ",
+          "mode": "list",
+          "cachedResultName": "JobStreet Scraper (shahidirfan/JobStreet-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/f7ggUvGaOrrUuPkZQ/input"
+        },
+        "customBody": "{\n    \"country\": \"ph\",\n    \"keyword\": \"developer\",\n    \"results_wanted\": 50\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        -704,
+        -32
+      ],
+      "id": "bbaf0a7d-8fe8-4543-8862-be52e147e288",
+      "name": "Run an Actor and get dataset",
+      "credentials": {
+        "apifyApi": {
+          "id": "zvdPxxC0bxtAI7fY",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-flash-lite-latest",
+          "mode": "list",
+          "cachedResultName": "models/gemini-flash-lite-latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a strict filter. Read the job description provided. If the job is a good fit for my resume, reply with exactly the word \"YES\". If it is not a good fit, reply with exactly the word \"NO\". Do not output any other text. Job Description: {{ $('Run an Actor and get dataset').item.json.description_text }}\n\nHere is my Software Developer Resume: {{ $json.text }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        128,
+        496
+      ],
+      "id": "9392c086-e68f-4357-ac37-be90f4533470",
+      "name": "Analyze Softdev alignment",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KC9LsM98TzktaWBA",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-flash-lite-latest",
+          "mode": "list",
+          "cachedResultName": "models/gemini-flash-lite-latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a strict filter. Read the job description provided. If the job is a good fit for my resume, reply with exactly the word \"YES\". If it is not a good fit, reply with exactly the word \"NO\". Do not output any other text. Job Description: {{ $('Run an Actor and get dataset').item.json.description_text }}\n\nHere is my QA Resume: {{ $json.text }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        -96
+      ],
+      "id": "97094d9b-46cd-4a85-b426-fb50b6a7cc42",
+      "name": "Analyze QA alignment",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KC9LsM98TzktaWBA",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://drive.google.com/uc?export=download&id=1gLP70JBCzj1P4HgVEpOMSWngf60cK-qg",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -704,
+        -240
+      ],
+      "id": "41b14b24-dd51-4736-aacd-50b1107224b8",
+      "name": "QA document"
+    },
+    {
+      "parameters": {
+        "url": "https://drive.google.com/uc?export=download&id=1YAYW6_-rg5mRVOhSNkbfzR3Peym7wtYA",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -704,
+        176
+      ],
+      "id": "4a8d40a7-58f2-458f-9b9b-acaa09c6f013",
+      "name": "SD document"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -464,
+        -144
+      ],
+      "id": "dcc327ea-7826-4e8a-abd3-cdd1040fc3fa",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -448,
+        128
+      ],
+      "id": "8631b404-007d-430d-a92a-b3cdbacea4a1",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        128
+      ],
+      "id": "bda1aa9d-595d-4d91-804e-ff81d1dd902d",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        -144
+      ],
+      "id": "748198c9-2de7-40c4-b803-129f422d0508",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "86cd075f-9842-4c86-a345-dcb16dc458fd",
+              "leftValue": "={{ $json.content.parts[0].text }}",
+              "rightValue": "YES",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        752,
+        0
+      ],
+      "id": "667a9403-fb9c-490f-976b-2be12be88258",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA",
+          "mode": "list",
+          "cachedResultName": "JobTracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Job ID": "={{ $('Run an Actor and get dataset').item.json.id }}",
+            "Company": "={{ $('Run an Actor and get dataset').item.json.company }}",
+            "Role Title": "={{ $('Run an Actor and get dataset').item.json.title }}",
+            "Location / Type": "={{ $('Run an Actor and get dataset').item.json.location }}",
+            "Posted Date": "={{ $('Run an Actor and get dataset').item.json.postedAt_iso }}",
+            "Target Salary": "={{ $('Run an Actor and get dataset').item.json.salary }}",
+            "Status": "Prospect",
+            "Posting Link": "={{ $('Run an Actor and get dataset').item.json.url }}",
+            "Qualification": "Fit"
+          },
+          "matchingColumns": [
+            "Job ID"
+          ],
+          "schema": [
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Role Title",
+              "displayName": "Role Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Location / Type",
+              "displayName": "Location / Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Posted Date",
+              "displayName": "Posted Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Target Salary",
+              "displayName": "Target Salary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Next Step Date",
+              "displayName": "Next Step Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Posting Link",
+              "displayName": "Posting Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Qualification",
+              "displayName": "Qualification",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        -176
+      ],
+      "id": "d6477324-4c8f-4c6f-8361-e84419e1dbcd",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9WC0Q10nPgUbe6KL",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA",
+          "mode": "list",
+          "cachedResultName": "JobTracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Job ID",
+              "lookupValue": "={{ $('Run an Actor and get dataset').item.json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        928,
+        208
+      ],
+      "id": "ed073a59-662c-46c6-abff-a6443cc3d3ae",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9WC0Q10nPgUbe6KL",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA",
+          "mode": "list",
+          "cachedResultName": "JobTracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NX-bzjERU2Nx9nQHa0V-bkejjhWk25wSyAaAZHTmCZA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Job ID": "={{ $('Run an Actor and get dataset').item.json.id }}",
+            "Company": "={{ $('Run an Actor and get dataset').item.json.company }}",
+            "Role Title": "={{ $('Run an Actor and get dataset').item.json.title }}",
+            "Location / Type": "={{ $('Run an Actor and get dataset').item.json.location }}",
+            "Posted Date": "={{ $('Run an Actor and get dataset').item.json.postedAt_iso }}",
+            "Target Salary": "={{ $('Run an Actor and get dataset').item.json.salary }}",
+            "Status": "Prospect",
+            "Posting Link": "={{ $('Run an Actor and get dataset').item.json.url }}",
+            "Qualification": "Unfit"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Role Title",
+              "displayName": "Role Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Location / Type",
+              "displayName": "Location / Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Posted Date",
+              "displayName": "Posted Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Target Salary",
+              "displayName": "Target Salary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Next Step Date",
+              "displayName": "Next Step Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Posting Link",
+              "displayName": "Posting Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Qualification",
+              "displayName": "Qualification",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1440,
+        176
+      ],
+      "id": "c9ebc514-f652-405f-a36b-86cc733c44ca",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9WC0Q10nPgUbe6KL",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "id",
+              "field2": "Job ID"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "outputDataFrom": "input1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1216,
+        176
+      ],
+      "id": "42940aeb-8e4c-49ca-80f9-1e4042312194",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 8,12,18 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1088,
+        -32
+      ],
+      "id": "952c6bb1-75e9-48da-845a-56602fb7924a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        32,
+        -320
+      ],
+      "id": "fd4da53b-1849-4359-8567-24a9fde8fc92",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        352,
+        -80
+      ],
+      "id": "d7ac2248-ead6-4d0b-a6f0-989db07669a4",
+      "name": "Wait",
+      "webhookId": "a0bcc3aa-3b50-4872-b7c1-1285bd0e24c2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        64,
+        224
+      ],
+      "id": "17107d7b-ebd3-4404-bc75-467e26cfa9c3",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        496
+      ],
+      "id": "b9f1db5f-f4b7-4f89-bf00-80fe94b8def9",
+      "name": "Wait1",
+      "webhookId": "a0bcc3aa-3b50-4872-b7c1-1285bd0e24c2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Run an Actor and get dataset": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QA document": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SD document": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze QA alignment": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Softdev alignment": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "QA document",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Run an Actor and get dataset",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SD document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyze QA alignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyze Softdev alignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Manila",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "eab0bb05-a0ed-4188-934c-007636e79674",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9def81a877eb4b99e09c7f5bea4db9d6ee826f10421d53817160e43e91d820b4"
+  },
+  "id": "rkj7pzUhCpNjnDm1",
+  "tags": []
+}
