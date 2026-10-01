@@ -1,6 +1,6 @@
 # 🤖 Autonomous AI Job Hunter
 
-![Workflow Architecture](workflow.png)
+<img width="956" height="346" alt="Screenshot 2026-10-01 090522" src="https://github.com/user-attachments/assets/8bb3eb2e-f3c9-4d65-9c69-7296e94ef461" />
 
 An automated, dual-persona job recruitment pipeline built with n8n. This workflow scrapes live job boards, analyzes postings against multiple resumes simultaneously using AI, and automatically categorizes them into a tracking database.
 
