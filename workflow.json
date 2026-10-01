@@ -254,7 +254,6 @@
             "Location / Type": "={{ $('Run an Actor and get dataset').item.json.location }}",
             "Posted Date": "={{ $('Run an Actor and get dataset').item.json.postedAt_iso }}",
             "Target Salary": "={{ $('Run an Actor and get dataset').item.json.salary }}",
-            "Status": "Prospect",
             "Posting Link": "={{ $('Run an Actor and get dataset').item.json.url }}",
             "Qualification": "Fit"
           },
@@ -324,7 +323,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": true
             },
             {
               "id": "Next Step Date",
@@ -403,7 +403,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        928,
+        960,
         208
       ],
       "id": "ed073a59-662c-46c6-abff-a6443cc3d3ae",
@@ -618,9 +618,7 @@
       "name": "Loop Over Items"
     },
     {
-      "parameters": {
-        "amount": 10
-      },
+      "parameters": {},
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
@@ -645,9 +643,7 @@
       "name": "Loop Over Items1"
     },
     {
-      "parameters": {
-        "amount": 10
-      },
+      "parameters": {},
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
@@ -899,7 +895,7 @@
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "eab0bb05-a0ed-4188-934c-007636e79674",
+  "versionId": "4b53f39b-c26b-44cf-aec5-90cfc86fbf0d",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "9def81a877eb4b99e09c7f5bea4db9d6ee826f10421d53817160e43e91d820b4"
