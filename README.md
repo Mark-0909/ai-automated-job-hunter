@@ -1,0 +1,2 @@
+# ai-automated-job-hunter
+
